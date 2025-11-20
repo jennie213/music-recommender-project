@@ -3,6 +3,26 @@ import streamlit as st
 import difflib
 from recommend import df, recommend_songs
 
+from huggingface_hub import hf_hub_download
+import pickle
+
+
+# --- HuggingFace Model Repo ---
+REPO_ID = "missJen/music-reco-system" 
+
+model1_path = hf_hub_download(repo_id=REPO_ID, filename="tfidf_matrix.pkl")
+model2_path = hf_hub_download(repo_id=REPO_ID, filename="df_cleaned.pkl")
+model3_path = hf_hub_download(repo_id=REPO_ID, filename="cosine_sim.pkl")
+
+with open(model1_path, "rb") as f:
+    model1 = pickle.load(f)
+
+with open(model2_path, "rb") as f:
+    model2 = pickle.load(f)
+
+with open(model3_path, "rb") as f:
+    model3 = pickle.load(f)
+
 # --- Page Config ---
 st.set_page_config(
     page_title="Music Recommender 🎵",
