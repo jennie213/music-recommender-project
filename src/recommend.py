@@ -1,6 +1,7 @@
 # recommend.py
 import joblib
 import logging
+from huggingface_hub import hf_hub_download
 
 # Setup logging
 logging.basicConfig(
@@ -12,15 +13,25 @@ logging.basicConfig(
     ]
 )
 
+# --- HuggingFace Repo ---
+REPO_ID = "missJen/music-reco-system"
+
 logging.info("🔁 Loading data...")
 try:
-    df = joblib.load('df_cleaned.pkl')
-    cosine_sim = joblib.load('cosine_sim.pkl')
+    # Download PKL files from HuggingFace Hub
+    df_path = hf_hub_download(repo_id=REPO_ID, filename="df_cleaned.pkl")
+    cosine_sim_path = hf_hub_download(repo_id=REPO_ID, filename="cosine_sim.pkl")
+    tfidf_path = hf_hub_download(repo_id=REPO_ID, filename="tfidf_matrix.pkl")
+    
+    # Load them
+    df = joblib.load(df_path)
+    cosine_sim = joblib.load(cosine_sim_path)
+    tfidf_matrix = joblib.load(tfidf_path)
+
     logging.info("✅ Data loaded successfully.")
 except Exception as e:
     logging.error("❌ Failed to load required files: %s", str(e))
     raise e
-
 
 def recommend_songs(song_name, top_n=5):
     logging.info("🎵 Recommending songs for: '%s'", song_name)
@@ -39,3 +50,4 @@ def recommend_songs(song_name, top_n=5):
     result_df.index.name = "S.No."
 
     return result_df
+
