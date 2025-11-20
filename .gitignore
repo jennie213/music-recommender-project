@@ -177,8 +177,3 @@ cython_debug/
 # logs file
 preprocess.log
 recommend.log
-
-# app files
-cosine_sim.pkl
-df_cleaned.pkl
-tfidf_matrix.pkl
